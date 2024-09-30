@@ -1,10 +1,8 @@
 import java.net.ServerSocket;
 
 fun main() {
-    var serverSocket = ServerSocket(4221)
-    
-    serverSocket.reuseAddress = true
- 
-    serverSocket.accept()
-    println("accepted new connection")
+    val socket = ServerSocket(4221).accept()
+    val outputStream = socket.getOutputStream()
+    outputStream.write("HTTP/1.1 200 OK\r\n\r\n".toByteArray())
+    outputStream.close()
 }
