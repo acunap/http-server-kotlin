@@ -1,3 +1,4 @@
+import java.io.File
 import java.net.ServerSocket;
 import java.util.concurrent.Executors
 
@@ -32,6 +33,18 @@ fun main() {
                             "user-agent" -> {
                                 val userAgent = request.headers["User-Agent"] ?: throw Exception("User-Agent header missing")
                                 "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\nContent-Length: ${userAgent.length}\r\n\r\n${userAgent}"
+                            }
+                            "files" -> {
+                                val file = File("/tmp/data/codecrafters.io/http-server-tester/${urlParts[2]}")
+                                val content = file.readBytes()
+
+                                "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: ${content.size}\r\n\r\n$content"
+//
+//                                if (file.exists()) {
+//                                    "HTTP/1.1 200 OK\r\nContent-Type: application/octet-stream\r\nContent-Length: 14\r\n\r\n${file.readLines().joinToString()}"
+//                                } else {
+//                                    "HTTP/1.1 404 Not Found\r\n\r\n"
+//                                }
                             }
 
                             else -> "HTTP/1.1 404 Not Found\r\n\r\n"
